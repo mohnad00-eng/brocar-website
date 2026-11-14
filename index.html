@@ -924,7 +924,7 @@
 </head>
 <body>
 
-    <video class="ambient-smoke-video" autoplay muted loop playsinline preload="auto" aria-hidden="true" tabindex="-1">
+    <video class="ambient-smoke-video" autoplay muted loop playsinline webkit-playsinline preload="auto" aria-hidden="true" tabindex="-1">
         <source src="Smoke_looping_from_incense_781f401c_t0-6.5_1080p.mp4" type="video/mp4">
     </video>
 
@@ -1318,6 +1318,26 @@
     </div>
 
     <script>
+        const smokeVideo = document.querySelector('.ambient-smoke-video');
+        if (smokeVideo && window.matchMedia('(max-width: 768px)').matches) {
+            const resumeSmokeVideo = () => {
+                if (document.hidden || !smokeVideo.paused) {
+                    return;
+                }
+
+                if (smokeVideo.ended) {
+                    smokeVideo.currentTime = 0;
+                }
+
+                smokeVideo.play().catch(error => {
+                    console.warn('Unable to resume the smoke background video:', error);
+                });
+            };
+
+            smokeVideo.addEventListener('ended', resumeSmokeVideo);
+            document.addEventListener('visibilitychange', resumeSmokeVideo);
+        }
+
         const pageHeader = document.querySelector('header');
         let lastScrollPosition = window.scrollY;
 
