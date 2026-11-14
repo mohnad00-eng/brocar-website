@@ -838,39 +838,54 @@
             }
 
             .product-category-group {
-                grid-template-columns: minmax(0, 1fr);
-                gap: 18px;
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 14px;
             }
 
             .product-header {
-                padding: 20px 16px;
+                padding: 14px 10px;
+            }
+
+            .product-header img {
+                height: 140px;
             }
 
             .product-header h4 {
-                font-size: 1.55rem;
+                font-size: 1.3rem;
+            }
+
+            .product-header > span:not(.product-badge) {
+                font-size: 0.72rem;
+                letter-spacing: 0.5px;
             }
 
             .product-body {
-                padding: 20px;
+                padding: 14px;
             }
 
             .product-desc {
-                font-size: 0.9rem;
-                margin-bottom: 16px;
+                font-size: 0.8rem;
+                margin-bottom: 12px;
             }
 
             .product-specs {
                 flex-wrap: wrap;
-                gap: 6px;
-                padding: 10px 8px;
-                margin-bottom: 16px;
+                gap: 4px;
+                padding: 8px 6px;
+                margin-bottom: 12px;
             }
 
             .spec-item {
-                flex: 1 1 30%;
+                flex: 1 1 28%;
                 min-width: 0;
-                font-size: 0.75rem;
+                font-size: 0.68rem;
                 overflow-wrap: anywhere;
+            }
+
+            .product-body .btn {
+                gap: 6px;
+                padding: 10px 6px;
+                font-size: 0.78rem;
             }
 
             .b2b-section {
@@ -920,6 +935,50 @@
                 font-size: 0.9rem;
             }
         }
+
+        @media (max-width: 360px) {
+            .product-category-group {
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+                gap: 8px;
+            }
+
+            .product-header {
+                padding: 12px 8px;
+            }
+
+            .product-header img {
+                height: 110px;
+            }
+
+            .product-header h4 {
+                font-size: 1.1rem;
+            }
+
+            .product-header > span:not(.product-badge) {
+                font-size: 0.65rem;
+            }
+
+            .product-body {
+                padding: 10px;
+            }
+
+            .product-desc {
+                font-size: 0.74rem;
+            }
+
+            .product-specs {
+                display: grid;
+                grid-template-columns: repeat(2, minmax(0, 1fr));
+            }
+
+            .spec-item {
+                font-size: 0.64rem;
+            }
+
+            .product-body .btn {
+                font-size: 0.72rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -943,7 +1002,7 @@
                 <li><a href="#about">عن الشركة</a></li>
                 <li><a href="#products">المنتجات الفاخرة</a></li>
                 <li><a href="#alkhal">منتجات الخال</a></li>
-                <li><a href="#b2b">طلب B2B وتقدير الطلبات</a></li>
+                <li><a href="#b2b">طلب B2B</a></li>
                 <li><a href="#contact">تواصل معنا</a></li>
             </ul>
 
@@ -1319,23 +1378,46 @@
 
     <script>
         const smokeVideo = document.querySelector('.ambient-smoke-video');
-        if (smokeVideo && window.matchMedia('(max-width: 768px)').matches) {
+        if (smokeVideo) {
+            smokeVideo.muted = true;
+            smokeVideo.defaultMuted = true;
+            smokeVideo.loop = true;
+            smokeVideo.playsInline = true;
+
+            const requestSmokePlayback = () => {
+                const playRequest = smokeVideo.play();
+                if (playRequest) {
+                    playRequest.catch(error => {
+                        console.warn('Unable to play the smoke background video:', error);
+                    });
+                }
+            };
+
             const resumeSmokeVideo = () => {
-                if (document.hidden || !smokeVideo.paused) {
+                if (document.hidden) {
                     return;
                 }
 
                 if (smokeVideo.ended) {
                     smokeVideo.currentTime = 0;
+                } else if (!smokeVideo.paused) {
+                    return;
                 }
 
-                smokeVideo.play().catch(error => {
-                    console.warn('Unable to resume the smoke background video:', error);
-                });
+                requestSmokePlayback();
+            };
+
+            const startSmokeVideoOnInteraction = () => {
+                document.removeEventListener('pointerdown', startSmokeVideoOnInteraction);
+                document.removeEventListener('touchstart', startSmokeVideoOnInteraction);
+                resumeSmokeVideo();
             };
 
             smokeVideo.addEventListener('ended', resumeSmokeVideo);
             document.addEventListener('visibilitychange', resumeSmokeVideo);
+            document.addEventListener('pointerdown', startSmokeVideoOnInteraction, { passive: true });
+            document.addEventListener('touchstart', startSmokeVideoOnInteraction, { passive: true });
+            resumeSmokeVideo();
         }
 
         const pageHeader = document.querySelector('header');
