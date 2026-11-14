@@ -576,6 +576,10 @@
             gap: 8px;
         }
 
+        .form-group-full {
+            grid-column: 1 / -1;
+        }
+
         .form-group label {
             font-size: 0.9rem;
             color: var(--gold-light);
@@ -597,6 +601,12 @@
             outline: none;
             border-color: var(--gold-primary);
             box-shadow: 0 0 10px rgba(212, 175, 55, 0.2);
+        }
+
+        textarea.form-control {
+            min-height: 140px;
+            line-height: 1.6;
+            resize: vertical;
         }
 
         /* Footer */
@@ -1320,7 +1330,7 @@
             <form id="b2bForm" onsubmit="submitB2BOrder(event)">
                 <div class="form-grid">
                     <div class="form-group">
-                        <label>اسم الشركة أو المعرض / Salon or Company Name</label>
+                        <label>اسم الشركة أو المعرض / Company Name</label>
                         <input type="text" class="form-control" id="companyName" required placeholder="مثال: معرض الفيروز للعطور">
                     </div>
                     <div class="form-group">
@@ -1334,6 +1344,10 @@
                     <div class="form-group">
                         <label>البريد الإلكتروني / Email</label>
                         <input type="email" class="form-control" id="email" required placeholder="info@company.com">
+                    </div>
+                    <div class="form-group form-group-full">
+                        <label for="inquiry">تفاصيل الاستفسار / Inquiry Details</label>
+                        <textarea class="form-control" id="inquiry" rows="5" placeholder="اكتب تفاصيل استفسارك هنا / Type your inquiry here"></textarea>
                     </div>
                 </div>
 
@@ -1471,6 +1485,7 @@
             const contact = document.getElementById('contactName').value;
             const phone = document.getElementById('phone').value;
             const email = document.getElementById('email').value;
+            const inquiry = document.getElementById('inquiry').value.trim();
             const product = selectedProduct;
 
             const subject = encodeURIComponent(`طلب B2B جديد من ${company} - ${product}`);
@@ -1485,6 +1500,8 @@
                 `رقم الهاتف: ${phone}
 ` +
                 `البريد الإلكتروني: ${email}
+` +
+                `تفاصيل الاستفسار: ${inquiry || 'لم يتم إدخال تفاصيل إضافية'}
 ` +
                 `المنتج المطلوب: ${product}
 
