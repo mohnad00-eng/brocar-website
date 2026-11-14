@@ -199,6 +199,28 @@
             border-color: var(--gold-primary);
         }
 
+        .whatsapp-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 42px;
+            height: 42px;
+            flex: 0 0 42px;
+            border: 1px solid rgba(37, 211, 102, 0.35);
+            border-radius: 50%;
+            background: rgba(37, 211, 102, 0.1);
+            color: #25d366;
+            font-size: 1.3rem;
+            text-decoration: none;
+            transition: var(--transition);
+        }
+
+        .whatsapp-badge:hover {
+            border-color: #25d366;
+            background: rgba(37, 211, 102, 0.2);
+            transform: translateY(-2px);
+        }
+
         @media (min-width: 769px) and (max-width: 1100px) {
             .nav-container {
                 padding: 4px 24px;
@@ -731,6 +753,10 @@
                 padding: 9px 11px;
             }
 
+            .header-actions {
+                gap: 10px;
+            }
+
             .phone-badge span {
                 position: absolute;
                 width: 1px;
@@ -1020,6 +1046,9 @@
                 <a href="tel:+201000089479" class="phone-badge">
                     <span>+201000089479</span>
                     <i class="fa-solid fa-phone"></i>
+                </a>
+                <a href="https://wa.me/201000089479" class="whatsapp-badge" target="_blank" rel="noopener noreferrer" aria-label="تواصل عبر واتساب على الرقم +201000089479">
+                    <i class="fa-brands fa-whatsapp" aria-hidden="true"></i>
                 </a>
             </div>
         </div>
@@ -1374,6 +1403,7 @@
             <div class="footer-col">
                 <h5>التواصل المباشر</h5>
                 <p><i class="fa-solid fa-phone" style="color: var(--gold-primary); margin-left: 8px;"></i> الهاتف: <a href="tel:+201000089479" style="display:inline; color:var(--gold-light);">+201000089479</a></p>
+                <p><i class="fa-brands fa-whatsapp" style="color: #25d366; margin-left: 8px;"></i> واتساب: <a href="https://wa.me/201000089479" target="_blank" rel="noopener noreferrer" dir="ltr" style="display:inline; color:var(--gold-light);">+201000089479</a></p>
                 <p><i class="fa-solid fa-envelope" style="color: var(--gold-primary); margin-left: 8px;"></i> البريد: <a href="mailto:sales@brocarscent.com" style="display:inline; color:var(--gold-light);">sales@brocarscent.com</a></p>
             </div>
         </div>
@@ -1393,10 +1423,12 @@
     <script>
         const smokeVideo = document.querySelector('.ambient-smoke-video');
         if (smokeVideo) {
+            smokeVideo.autoplay = true;
             smokeVideo.muted = true;
             smokeVideo.defaultMuted = true;
             smokeVideo.loop = true;
             smokeVideo.playsInline = true;
+            smokeVideo.preload = 'auto';
 
             const requestSmokePlayback = () => {
                 const playRequest = smokeVideo.play();
@@ -1427,6 +1459,7 @@
                 resumeSmokeVideo();
             };
 
+            smokeVideo.addEventListener('canplay', resumeSmokeVideo);
             smokeVideo.addEventListener('ended', resumeSmokeVideo);
             document.addEventListener('visibilitychange', resumeSmokeVideo);
             document.addEventListener('pointerdown', startSmokeVideoOnInteraction, { passive: true });
